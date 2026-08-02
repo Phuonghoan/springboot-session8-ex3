@@ -28,18 +28,29 @@ public class BookController {
             @ModelAttribute
             BookCreateDTO dto
     ) {
-        Book createdBook =
-                bookService.createBook(dto);
+        Book createdBook = bookService.createBook(dto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(createdBook);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Book> getBookById(
+            @PathVariable Long id
+    ) {
+        Book book = bookService.getBookById(id);
+
+        return ResponseEntity.ok(book);
+    }
+
     @PatchMapping("/update/{id}")
     public ResponseEntity<String> updateBookStock(
             @PathVariable Long id,
-            @Valid @RequestBody BookUpdateStockDTO dto
+
+            @Valid
+            @RequestBody
+            BookUpdateStockDTO dto
     ) {
         bookService.updateBook(id, dto);
 

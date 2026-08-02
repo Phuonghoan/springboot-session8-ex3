@@ -85,17 +85,25 @@ public class BookService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Book with id "
+                                        + id
+                                        + " not found"
+                        )
+                );
+    }
+
     @Transactional
     public Book updateBook(
             Long id,
             BookUpdateStockDTO dto
     ) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Book with id " + id + " not found"
-                        )
-                );
+        Book book = getBookById(id);
+
         book.setStock(dto.getStock());
 
         return bookRepository.save(book);
